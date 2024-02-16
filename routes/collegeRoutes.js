@@ -4,7 +4,7 @@ const path = require('path')
 const collegesController = require('../controllers/collegesController')
 
 router.route('/')
-    .get(collegesController.getAllColleges)
+    .get(collegesController.getColleges)
     // .post(usersController.createNewUser)
     // .patch(usersController.updateUser)
     // .delete(usersController.deleteUser)

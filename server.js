@@ -14,6 +14,33 @@ const PORT = process.env.PORT || 3500
 
 connectDB()
 
+
+
+
+// const fs = require('fs')
+// const College = require('./models/College')
+// const User = require('./models/User')
+// let arr = fs.readFileSync('college_names.txt').toString('UTF8').split('\n');
+
+
+// const createColleges = async (arr) => {
+  
+//     for (const name of arr) {
+//       const collegeObject = { "name": name, "essays": [] };
+  
+//       try {
+//         await College.create(collegeObject);
+//       } catch (error) {
+//         console.error(`Error creating college ${name}:`, error.message);
+//       }
+//     }
+// };
+
+// createColleges(arr)
+
+
+
+
 app.use(logger);
 app.use(cors(corsOptions))
 app.use(express.json())
