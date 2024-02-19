@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const path = require('path')
-const collegesController = require('../controllers/collegesController')
+const singleCollegeController = require('../controllers/singleCollegeController')
 
 router.route('/')
-    .get(collegesController.getColleges)
+    .get(singleCollegeController.getCollege)
     // .post(usersController.createNewUser)
     // .patch(usersController.updateUser)
     // .delete(usersController.deleteUser)
