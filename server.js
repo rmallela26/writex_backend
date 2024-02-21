@@ -20,13 +20,26 @@ connectDB()
 // const fs = require('fs')
 // const College = require('./models/College')
 // const User = require('./models/User')
-// let arr = fs.readFileSync('college_names.txt').toString('UTF8').split('\n');
+// let arr = fs.readFileSync('college_data.txt').toString('UTF8').split('\n');
 
 
 // const createColleges = async (arr) => {
   
-//     for (const name of arr) {
-//       const collegeObject = { "name": name, "essays": [] };
+//     for (const college of arr) {
+//     //   const collegeObject = { "name": name, "essays": [] };
+//       const obj = JSON.parse(college)
+//       const name = obj.name
+//       console.log(name)
+//       var essays = []
+//       for (const essay of obj.essays) {
+//         const essayObj = essay
+//         const essayStr = `${essayObj.title},${essayObj.required},${essayObj.word_limit},${essayObj.essay}`
+//         essays.push(essayStr)
+//       }
+
+//       const collegeObject = { "name": name, "essays": essays }
+
+
   
 //       try {
 //         await College.create(collegeObject);
