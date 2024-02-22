@@ -62,7 +62,8 @@ app.use('/', express.static(path.join(__dirname, 'public')))
 app.use('/', require('./routes/root'))
 app.use('/users', require('./routes/userRoutes'))
 app.use('/colleges', require('./routes/allCollegesRoutes'))
-app.use('one-college', require('./routes/singleCollegeRoutes'))
+app.use('/one-college', require('./routes/singleCollegeRoutes'))
+app.use('/essays', require('./routes/essaysRoutes'))
 
 app.all('*', (req, res) => {
     res.status(404);
