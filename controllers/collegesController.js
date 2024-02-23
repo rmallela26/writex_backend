@@ -36,8 +36,6 @@ const getEssays = asyncHandler(async (req, res) => {
     return res.json(college[0].essays)
 })
 
-
-
 module.exports = {
     getCollegeNames,
     getEssays

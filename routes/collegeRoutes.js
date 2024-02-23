@@ -1,7 +1,9 @@
 const express = require('express')
 const router = express.Router()
-const path = require('path')
 const collegesController = require('../controllers/collegesController')
+const verifyJWT = require('../middleware/verifyJWT')
+
+router.use(verifyJWT)
 
 router.route('/college-names')
     .get(collegesController.getCollegeNames)
