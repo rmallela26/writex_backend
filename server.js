@@ -60,10 +60,11 @@ app.use(express.json())
 app.use(cookieParser())
 app.use('/', express.static(path.join(__dirname, 'public')))
 app.use('/', require('./routes/root'))
+
+
 app.use('/users', require('./routes/userRoutes'))
-app.use('/colleges', require('./routes/allCollegesRoutes'))
-app.use('/one-college', require('./routes/singleCollegeRoutes'))
-app.use('/essays', require('./routes/essaysRoutes'))
+app.use('/colleges', require('./routes/collegeRoutes'))
+
 
 app.all('*', (req, res) => {
     res.status(404);

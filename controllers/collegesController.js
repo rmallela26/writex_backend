@@ -2,16 +2,11 @@
 
 const College = require('../models/College')
 const asyncHandler = require('express-async-handler')
-const bcrypt = require('bcrypt')
 
-//@desc Get all users
-//@route GET /users
+//@desc Get all college names
+//@route GET /college-names
 //@access PRIVATE
-
-//create one route for getting one college, and send a parameter the college name for this route
-//create another route for getting all college names
-const getColleges = asyncHandler(async (req, res) => {
-    //IN PRODUCTION MAKE SURE THAT COLLEGE NAMES IN DATABASE ARE SORTED ALPHABETICALLY
+const getCollegeNames = asyncHandler(async (req, res) => {
     console.log("names")
         const colleges = await College.find().select('-essays -__v').lean() //just names
         console.log("got here")
@@ -32,6 +27,18 @@ const getColleges = asyncHandler(async (req, res) => {
         return res.json(college_list)
 })
 
+//@desc Get all essays for certain college
+//@route GET /essays
+//@access PRIVATE
+const getEssays = asyncHandler(async (req, res) => {
+    const id = req.query.id;
+    const college = await College.find({_id:id}).lean()
+    return res.json(college[0].essays)
+})
+
+
+
 module.exports = {
-    getColleges
+    getCollegeNames,
+    getEssays
 }
