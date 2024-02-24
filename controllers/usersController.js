@@ -5,22 +5,25 @@ const bcrypt = require('bcrypt')
 //@desc Get all users
 //@route GET /users
 //@access PRIVATE
-const getAllUsers = asyncHandler(async (req, res) => {
-    const users = await User.find().select('-password').lean()
-    if(!users?.length) {
+const getUser = asyncHandler(async (req, res) => {
+    const username = req.user;
+    console.log(username)
+
+    const user = await User.findOne({ username }).select('-username -_id -password').lean()
+    if(!user) {
         return res.status(400).json({ message: "No users found" })
     }
-    res.json(users)
+    res.json(user)
 })
 
 //@desc create new user
 //@route POST /users
 //@access PRIVATE
 const createNewUser = asyncHandler(async (req, res) => {
-    const { username, password, colleges } = req.body
+    const { username, password } = req.body
 
     //confirm data is there
-    if(!username || !password || !Array.isArray(colleges)) {
+    if(!username || !password) {
         return res.status(400).json({ message: "All fields are required" })
     }
 
@@ -33,7 +36,7 @@ const createNewUser = asyncHandler(async (req, res) => {
 
     const hashedPwd = await bcrypt.hash(password, 10) //10 salt rounds
 
-    const userObject = { username, "password": hashedPwd, colleges}
+    const userObject = { username, "password": hashedPwd, "colleges": []}
 
     //create and store user
     const user = await User.create(userObject)
@@ -49,35 +52,39 @@ const createNewUser = asyncHandler(async (req, res) => {
 //@route PATCH /users
 //@access PRIVATE
 const updateUser = asyncHandler(async (req, res) => {
-    const { id, username, colleges, password } = req.body
+    const { college } = req.body
+
+    console.log("username is ")
+    console.log(req.user)
+    const username = req.user
 
     // Confirm data 
-    if (!id || !username || !Array.isArray(colleges)) {
-        return res.status(400).json({ message: 'All fields except password are required' })
+    if (!college || Object.keys(college).length === 0) {
+        return res.status(400).json({ message: 'All fields required' })
     }
 
     // Does the user exist to update?
-    const user = await User.findById(id).exec()
+    const user = await User.findOne({ username }).exec()
 
     if (!user) {
         return res.status(400).json({ message: 'User not found' })
     }
 
-    // Check for duplicate 
-    const duplicate = await User.findOne({ username }).lean().exec()
+    // // Check for duplicate 
+    // const duplicate = await User.findOne({ username }).lean().exec()
 
-    // Allow updates to the original user 
-    if (duplicate && duplicate?._id.toString() !== id) {
-        return res.status(409).json({ message: 'Duplicate username' })
-    }
+    // // Allow updates to the original user 
+    // if (duplicate && duplicate?._id.toString() !== id) {
+    //     return res.status(409).json({ message: 'Duplicate username' })
+    // }
 
-    user.username = username
-    user.colleges = colleges
+    // user.username = username
+    user.colleges = [...user.colleges, college]
 
-    if (password) {
-        // Hash password 
-        user.password = await bcrypt.hash(password, 10) // salt rounds 
-    }
+    // if (password) {
+    //     // Hash password 
+    //     user.password = await bcrypt.hash(password, 10) // salt rounds 
+    // }
 
     const updatedUser = await user.save()
 
@@ -110,7 +117,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 })
 
 module.exports = {
-    getAllUsers,
+    getUser,
     createNewUser,
     updateUser,
     deleteUser

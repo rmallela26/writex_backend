@@ -12,9 +12,14 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     colleges: [{
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'College'
+        name: {
+            type: String,
+            required: true
+        },
+        id: {
+            type: String,
+            required: true
+        }
     }]
     
 })
