@@ -54,12 +54,16 @@ const refresh = (req, res) => {
     if(!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' })
     console.log("bears")
     const refreshToken = cookies.jwt
+    // console.log(refreshToken)
 
     jwt.verify(
         refreshToken,
         process.env.REFRESH_TOKEN_SECRET,
         asyncHandler(async (err, decoded) => {
-            if(err) return res.status(403).json({ message: "Forbidden" })
+            if(err) {
+                console.log(err)
+                return res.status(403).json({ message: "Forbidden" })
+            }
 
             const foundUser = await User.findOne({ username: decoded.username })
             if(!foundUser) return res.status(401).json({ message: 'Unauthorized' })
