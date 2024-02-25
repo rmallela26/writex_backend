@@ -22,12 +22,10 @@ const userSchema = new mongoose.Schema({
         }
     }],
     accessToken: {
-        type: String,
-        required: true
+        type: String
     },
     refreshToken: {
-        type: String,
-        required: true
+        type: String
     }
     
 })

@@ -2,7 +2,7 @@ const User = require('../models/User')
 const asyncHandler = require('express-async-handler')
 const bcrypt = require('bcrypt')
 
-//@desc Get all users
+//@desc Get all college,doc pairs for a user
 //@route GET /users
 //@access PRIVATE
 const getUser = asyncHandler(async (req, res) => {
@@ -136,8 +136,21 @@ const setTokens = asyncHandler(async (req, res) => {
     res.json({ message: `${updatedUser.username} updated` })
 })
 
+//@desc get access token
+//@route GET /users/google-access
+//@access PRIVATE
+const getAccessToken = asyncHandler(async (req, res) => {
+    const username = req.user;
+
+    const user = await User.findOne({ username }).select('accessToken').lean()
+    if(!user) {
+        return res.status(400).json({ message: "No users found" })
+    }
+    res.json(user)
+})
+
 //@desc get refresh token
-//@route GET /users/google-tokens
+//@route GET /users/google-refresh
 //@access PRIVATE
 const getRefreshToken = asyncHandler(async (req, res) => {
     const username = req.user;
@@ -153,7 +166,10 @@ module.exports = {
     getUser,
     createNewUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    setTokens,
+    getAccessToken,
+    getRefreshToken
 }
 
 

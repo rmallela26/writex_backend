@@ -9,4 +9,13 @@ router.route('/')
     .patch(verifyJWT, usersController.updateUser)
     // .delete(usersController.deleteUser)
 
+router.route('/google-tokens')
+    .post(verifyJWT, usersController.setTokens)
+
+router.route('/google-access')
+    .get(verifyJWT, usersController.getAccessToken)
+
+router.route('/google-refresh')
+    .get(verifyJWT, usersController.getRefreshToken)
+
 module.exports = router
