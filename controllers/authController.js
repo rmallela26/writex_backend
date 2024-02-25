@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const asyncHandler = require('express-async-handler')
 const expressAsyncHandler = require('express-async-handler')
+const { OAuth2Client, UserRefreshClient } = require('google-auth-library')
+
 
 //@desc login
 //@route POST /auth
@@ -88,8 +90,41 @@ const logout = (req, res) => {
 
 }
 
+//@desc google login
+//@route POST /auth/google
+//@acess PRIVATE (should be logged in at this point)
+const googleLogin = async (req, res) => {
+    const oAuth2Client = new OAuth2Client(
+        process.env.CLIENT_ID,
+        process.env.CLIENT_SECRET,
+        'postmessage',
+    );
+
+    const { tokens } = await oAuth2Client.getToken(req.body.code);
+    console.log(tokens);
+  
+    res.json(tokens);
+}
+
+//@desc refresh google access token
+//@route POST /auth/google-refresh
+//@acess PRIVATE (should be logged in at this point)
+const googleRefresh = async (req, res) => {
+
+    const user = new UserRefreshClient(
+        process.env.CLIENT_ID,
+        process.env.CLIENT_SECRET,
+        req.body.refreshToken,
+      );
+      const { credentials } = await user.refreshAccessToken(); // optain new tokens
+      console.log(credentials)
+      res.json(credentials);
+}
+
 module.exports = {
     login,
     refresh,
-    logout
+    logout,
+    googleLogin,
+    googleRefresh
 }

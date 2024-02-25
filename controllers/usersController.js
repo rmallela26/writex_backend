@@ -36,7 +36,7 @@ const createNewUser = asyncHandler(async (req, res) => {
 
     const hashedPwd = await bcrypt.hash(password, 10) //10 salt rounds
 
-    const userObject = { username, "password": hashedPwd, "colleges": []}
+    const userObject = { username, "password": hashedPwd, "colleges": [], "accessToken": "", "refreshToken": ""}
 
     //create and store user
     const user = await User.create(userObject)
@@ -114,6 +114,39 @@ const deleteUser = asyncHandler(async (req, res) => {
     const reply = `Username ${result.username} with ID ${result._id} deleted`
 
     res.json(reply)
+})
+
+//@desc set google access and refresh tokens
+//@route PATCH /users/google-tokens
+//@access PRIVATE
+const setTokens = asyncHandler(async (req, res) => {
+    if(!req.body.accessToken) res.status(400).json({ message: "All fields required" })
+
+    const username = req.user
+    const user = await User.findOne({ username }).exec()
+    if(!user) {
+        return res.status(400).json({ message: "No users found" })
+    }
+
+    user.accessToken = req.body.accessToken
+    if(req.body.refreshToken) user.refreshToken = req.body.refreshToken
+
+    const updatedUser = await user.save()
+
+    res.json({ message: `${updatedUser.username} updated` })
+})
+
+//@desc get refresh token
+//@route GET /users/google-tokens
+//@access PRIVATE
+const getRefreshToken = asyncHandler(async (req, res) => {
+    const username = req.user;
+
+    const user = await User.findOne({ username }).select('refreshToken').lean()
+    if(!user) {
+        return res.status(400).json({ message: "No users found" })
+    }
+    res.json(user)
 })
 
 module.exports = {

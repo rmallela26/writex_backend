@@ -12,4 +12,10 @@ router.route('/refresh') //refresh token
 router.route('/logout')
     .post(authController.logout)
 
+router.route('/google')
+    .post(authController.googleLogin)
+
+router.route('/google-refresh')
+    .post(authController.googleRefresh)
+
 module.exports = router
