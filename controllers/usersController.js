@@ -48,8 +48,8 @@ const createNewUser = asyncHandler(async (req, res) => {
     }
 })
 
-//@desc update a user
-//@route PATCH /users
+//@desc update a user to add college
+//@route PATCH /users/add
 //@access PRIVATE
 const updateUser = asyncHandler(async (req, res) => {
     const { college } = req.body
@@ -70,22 +70,43 @@ const updateUser = asyncHandler(async (req, res) => {
         return res.status(400).json({ message: 'User not found' })
     }
 
-    // // Check for duplicate 
-    // const duplicate = await User.findOne({ username }).lean().exec()
-
-    // // Allow updates to the original user 
-    // if (duplicate && duplicate?._id.toString() !== id) {
-    //     return res.status(409).json({ message: 'Duplicate username' })
-    // }
-
     // user.username = username
     user.colleges = [...user.colleges, college]
 
-    // if (password) {
-    //     // Hash password 
-    //     user.password = await bcrypt.hash(password, 10) // salt rounds 
-    // }
+    const updatedUser = await user.save()
 
+    res.json({ message: `${updatedUser.username} updated` })
+})
+
+//@desc update a user to delete college
+//@route PATCH /users/delete
+//@access PRIVATE
+const updateUserDelete = asyncHandler(async (req, res) => {
+    const { college } = req.body
+
+    console.log("username is ")
+    console.log(req.user)
+    const username = req.user
+
+    // Confirm data 
+    if (!college || Object.keys(college).length === 0) {
+        return res.status(400).json({ message: 'All fields required' })
+    }
+
+    // Does the user exist to update?
+    const user = await User.findOne({ username }).exec()
+
+    if (!user) {
+        return res.status(400).json({ message: 'User not found' })
+    }
+
+    // find college and remove
+    const index = user.colleges.findIndex(x => x.name === college)
+    if (index > -1) { // only splice array when item is found
+        user.colleges.splice(index, 1); // 2nd parameter means remove one item only
+    }
+
+    console.log(user.colleges)
     const updatedUser = await user.save()
 
     res.json({ message: `${updatedUser.username} updated` })
@@ -166,6 +187,7 @@ module.exports = {
     getUser,
     createNewUser,
     updateUser,
+    updateUserDelete,
     deleteUser,
     setTokens,
     getAccessToken,

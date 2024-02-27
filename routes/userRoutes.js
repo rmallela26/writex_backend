@@ -6,8 +6,13 @@ const verifyJWT = require('../middleware/verifyJWT')
 router.route('/')
     .get(verifyJWT, usersController.getUser)
     .post(usersController.createNewUser)
-    .patch(verifyJWT, usersController.updateUser)
     // .delete(usersController.deleteUser)
+
+router.route('/add')
+    .patch(verifyJWT, usersController.updateUser)
+
+router.route('/delete')
+    .patch(verifyJWT, usersController.updateUserDelete)
 
 router.route('/google-tokens')
     .post(verifyJWT, usersController.setTokens)
