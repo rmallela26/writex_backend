@@ -21,6 +21,9 @@ const userSchema = new mongoose.Schema({
             required: true
         }
     }],
+    activities: [{
+        type: String
+    }],
     accessToken: {
         type: String
     },

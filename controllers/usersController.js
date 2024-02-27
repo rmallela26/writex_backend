@@ -36,7 +36,7 @@ const createNewUser = asyncHandler(async (req, res) => {
 
     const hashedPwd = await bcrypt.hash(password, 10) //10 salt rounds
 
-    const userObject = { username, "password": hashedPwd, "colleges": [], "accessToken": "", "refreshToken": ""}
+    const userObject = { username, "password": hashedPwd, "colleges": [], "activities": [], "accessToken": "", "refreshToken": ""}
 
     //create and store user
     const user = await User.create(userObject)
@@ -183,6 +183,43 @@ const getRefreshToken = asyncHandler(async (req, res) => {
     res.json(user)
 })
 
+//@desc Get all activties docs for a user
+//@route GET /users/activities
+//@access PRIVATE
+const getUserActivities = asyncHandler(async (req, res) => {
+    const username = req.user;
+    console.log(username)
+
+    const user = await User.findOne({ username }).select('activities').lean()
+    if(!user) {
+        return res.status(400).json({ message: "No users found" })
+    }
+    res.json(user)
+})
+
+//@desc Get add activties docs for a user
+//@route POST /users/activities
+//@access PRIVATE
+const addUserActivities = asyncHandler(async (req, res) => {
+    const { activities } = req.body
+    const username = req.user;
+
+    if(!activities) res.status(400).json({ message: "All fields are required" })
+
+    console.log(username)
+
+    const user = await User.findOne({ username }).select('activities').exec()
+    if(!user) {
+        return res.status(400).json({ message: "No users found" })
+    }
+    
+    user.activities = activities
+
+    const updatedUser = await user.save()
+
+    res.json({ message: `${updatedUser.username} updated` })
+})
+
 module.exports = {
     getUser,
     createNewUser,
@@ -191,7 +228,9 @@ module.exports = {
     deleteUser,
     setTokens,
     getAccessToken,
-    getRefreshToken
+    getRefreshToken,
+    getUserActivities,
+    addUserActivities
 }
 
 

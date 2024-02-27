@@ -8,6 +8,10 @@ router.route('/')
     .post(usersController.createNewUser)
     // .delete(usersController.deleteUser)
 
+router.route('/activities')
+    .get(verifyJWT, usersController.getUserActivities)
+    .post(verifyJWT, usersController.addUserActivities)
+
 router.route('/add')
     .patch(verifyJWT, usersController.updateUser)
 
