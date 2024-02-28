@@ -194,10 +194,11 @@ const getUserActivities = asyncHandler(async (req, res) => {
     if(!user) {
         return res.status(400).json({ message: "No users found" })
     }
+    console.log(user.activities)
     res.json(user)
 })
 
-//@desc Get add activties docs for a user
+//@desc add activties docs for a user
 //@route POST /users/activities
 //@access PRIVATE
 const addUserActivities = asyncHandler(async (req, res) => {
