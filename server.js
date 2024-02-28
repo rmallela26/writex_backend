@@ -21,10 +21,12 @@ connectDB()
 // const College = require('./models/College')
 // const User = require('./models/User')
 // let arr = fs.readFileSync('college_data.txt').toString('UTF8').split('\n');
-
+// let logosArr = fs.readFileSync('college_logos.txt').toString('UTF8').split('\n');
 
 // const createColleges = async (arr) => {
   
+//     var ind = 0;
+
 //     for (const college of arr) {
 //     //   const collegeObject = { "name": name, "essays": [] };
 //       const obj = JSON.parse(college)
@@ -33,12 +35,12 @@ connectDB()
 //       var essays = []
 //       for (const essay of obj.essays) {
 //         const essayObj = essay
-//         const essayStr = `${essayObj.title},${essayObj.required},${essayObj.word_limit},${essayObj.essay}`
+//         const essayStr = `${essayObj.title}|${essayObj.required}|${essayObj.word_limit}|${essayObj.essay}`
 //         essays.push(essayStr)
 //       }
 
-//       const collegeObject = { "name": name, "essays": essays }
-
+//       const collegeObject = { "name": name, "essays": essays, "logo": logosArr[ind] }
+//       ind = ind + 1;
 
   
 //       try {

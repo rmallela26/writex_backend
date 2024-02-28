@@ -9,7 +9,11 @@ const collegeSchema = new mongoose.Schema({
     essays: [{
         type: String,
         required: true
-    }]
+    }],
+    logo: {
+        type: String,
+        required: true
+    }
 })
 
 module.exports = mongoose.model('College', collegeSchema)

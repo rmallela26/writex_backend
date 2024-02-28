@@ -9,7 +9,7 @@ const getUser = asyncHandler(async (req, res) => {
     const username = req.user;
     console.log(username)
 
-    const user = await User.findOne({ username }).select('-username -_id -password').lean()
+    const user = await User.findOne({ username }).select('-username -password').lean()
     if(!user) {
         return res.status(400).json({ message: "No users found" })
     }

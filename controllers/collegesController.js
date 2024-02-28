@@ -34,7 +34,20 @@ const getEssays = asyncHandler(async (req, res) => {
     return res.json(college[0].essays)
 })
 
+//@desc Get all logo for this college
+//@route GET /logo
+//@access PRIVATE
+const getLogo = asyncHandler(async (req, res) => {
+    let name = req.query.name;
+    name = name.split('_').join(' ')
+    const college = await College.findOne({ name }).select('logo').lean()
+    return res.json(college)
+})
+
+
+
 module.exports = {
     getCollegeNames,
-    getEssays
+    getEssays,
+    getLogo
 }

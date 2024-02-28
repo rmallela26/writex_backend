@@ -11,5 +11,8 @@ router.route('/college-names')
 router.route('/essays')
     .get(collegesController.getEssays)
 
+router.route('/logo')
+    .get(collegesController.getLogo)
+
 
 module.exports = router
