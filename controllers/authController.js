@@ -102,7 +102,14 @@ const googleLogin = async (req, res) => {
         process.env.CLIENT_ID,
         process.env.CLIENT_SECRET,
         'postmessage',
+        // "https://www.googleapis.com/auth/drive.file",
     );
+
+    const scopes = ['https://www.googleapis.com/auth/drive.file'];
+    const authUrl = oAuth2Client.generateAuthUrl({
+        access_type: 'offline', // This ensures you get a refresh token
+        scope: scopes,
+    });
 
     const { tokens } = await oAuth2Client.getToken(req.body.code);
     console.log(tokens);
@@ -121,6 +128,7 @@ const googleRefresh = async (req, res) => {
         req.body.refreshToken,
       );
       const { credentials } = await user.refreshAccessToken(); // optain new tokens
+      console.log("CREDEDNTIALS")
       console.log(credentials)
       res.json(credentials);
 }
