@@ -125,12 +125,31 @@ const googleRefresh = async (req, res) => {
     const user = new UserRefreshClient(
         process.env.CLIENT_ID,
         process.env.CLIENT_SECRET,
-        req.body.refreshToken,
-      );
-      const { credentials } = await user.refreshAccessToken(); // optain new tokens
-      console.log("CREDEDNTIALS")
-      console.log(credentials)
-      res.json(credentials);
+        req.body.refreshToken, //breaking here in frontend because i hardcoded the refresh token instead of using what was sent when initially created in req.body
+    );
+
+    console.log("BEARS")
+    console.log(user)
+    console.log("BEARS")
+
+    //check if refresh token is valid
+
+    try {
+        const { credentials } = await user.refreshAccessToken()
+        console.log("CREDEDNTIALS")
+        console.log(credentials)
+        res.json(credentials);
+    } catch {
+        //refresh token not valid, navigate to google login page
+        console.log("NAVIGATE TO GOOGLE LOIGN PAGE")
+        return res.status(401).json({ message: 'Unauthorized' })
+    }
+
+
+    // const { credentials } = await user.refreshAccessToken(); // optain new tokens
+    // console.log("CREDEDNTIALS")
+    // console.log(credentials)
+    // res.json(credentials);
 }
 
 module.exports = {
